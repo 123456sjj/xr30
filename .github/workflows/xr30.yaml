@@ -19,7 +19,7 @@ jobs:
     - name: Checkout LEDE source
       uses: actions/checkout@v4
       with:
-        repository: coolsnowwolf/lede
+        repository: 123456sjj/xr30
         ref: master
         path: lede
 
