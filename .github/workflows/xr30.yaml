@@ -16,7 +16,7 @@ jobs:
     timeout-minutes: 360  # 6小时超时
 
     steps:
-    - name: Checkout LEDE source
+    - name: Checkout 123456sjj source
       uses: actions/checkout@v4
       with:
         repository: 123456sjj/xr30
@@ -63,18 +63,18 @@ jobs:
         make defconfig
 
     - name: Download packages
-      working-directory: ./lede
+      working-directory: ./xr30
       run: make download -j$(nproc)
 
     - name: Build OpenWrt
-      working-directory: ./lede
+      working-directory: ./xr30
       run: make -j$(nproc) V=s
 
     - name: Pack artifacts
       run: |
         mkdir artifacts
-        cp lede/bin/targets/ramips/mt7621/*.bin artifacts/
-        cp lede/bin/targets/ramips/mt7621/*.gz artifacts/
+        cp xr30/bin/targets/ramips/mt7621/*.bin artifacts/
+        cp xr30/bin/targets/ramips/mt7621/*.gz artifacts/
         tar -czvf openwrt_build_$(date +%Y%m%d).tar.gz artifacts/
 
     - name: Create Release
