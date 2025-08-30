@@ -72,18 +72,16 @@ jobs:
       working-directory: ./xr30
       run: make -j$(($(nproc) - 1)) V=s   # 保留一个核心给系统
 
-    - name: Pack artifacts
-      run: |
-        cd xr30/bin/targets/ramips/mt7621/
-        mkdir -p artifacts
-        cp openwrt-* artifacts/
-        tar -czvf xr30_openwrt_$(date +%Y%m%d_%H%M).tar.gz artifacts/
-
-    - name: Upload Release
-      uses: softprops/action-gh-release@v1
+    - name: Upload package
+      uses: actions/upload-artifact@v4
       with:
-        files: xr30/bin/targets/ramips/mt7621/xr30_openwrt_*.tar.gz
-        draft: false
-        prerelease: false
+          name: OpenWrt_package
+          path: ./artifact/package/
+
+    - name: Upload firmware
+      uses: actions/upload-artifact@v4
+      with:
+          name: OpenWrt_firmware
+          path: ./bin/targets/
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
