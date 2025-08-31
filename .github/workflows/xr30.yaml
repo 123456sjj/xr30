@@ -72,6 +72,20 @@ jobs:
       working-directory: ./xr30
       run: make -j$(($(nproc) - 1)) V=s   # 保留一个核心给系统
 
+    - name: Prepare artifact
+      run: 
+          mkdir -p ./artifact/package
+          mkdir -p ./artifact/buildinfo
+          rm -rf $(find ./bin/targets/ -type d -name "packages")
+          cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
+          cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
+
+    - name: Upload buildinfo
+      uses: actions/upload-artifact@v4
+      with:
+          name: OpenWrt_buildinfo
+          path: ./artifact/buildinfo/
+
     - name: Upload package
       uses: actions/upload-artifact@v4
       with:
@@ -83,5 +97,6 @@ jobs:
       with:
           name: OpenWrt_firmware
           path: ./bin/targets/
+
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
